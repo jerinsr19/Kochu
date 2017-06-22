@@ -5,8 +5,13 @@ return {
 	db = 2, --default redis db: 0
 	superadmins = {20516707, 23646077, 278941742,20516707},
 	log = {
+<<<<<<< HEAD
 		chat = -1001089188566, --Your log chat, where your bot must be added!
 		admin = 20516707, --The admin.
+=======
+		chat = -1001118545630, --Your log chat, where your bot must be added!
+		admin = 23646077, --The admin.
+>>>>>>> f62555a... "Address this report" button for reported messages, removed useless code
 		stats = nil
 	},
 	human_readable_version = '4.2.0',
