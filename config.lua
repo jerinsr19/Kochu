@@ -59,5 +59,4 @@ return {
                 'welcome',
                 'admin',
                 'extra', --must be the last plugin in the list.
-        },
-      
+        },   
