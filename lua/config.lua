@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 return {
 	bot_api_key = "319730917:AAFcJ3hiQQ1A9qmkgPRCrXD5wva8PMNRcPk", --Please add your bot api key here!
 =======
@@ -66,6 +67,13 @@ local _M =
 	cmd = '^[/!#]',
 	allowed_updates = {"message", "edited_message", "callback_query"},
 	db = 2, --default redis db: 0
+=======
+return {
+	bot_api_key = "", --Please add your bot api key here!
+	cmd = '^[/!#]',
+	allowed_updates = {"message", "edited_message", "callback_query"},
+	db = 2, --default redis db: 0
+>>>>>>> parent of 56bf917... Move config to environment variables
 	superadmins = {23646077, 278941742},
 	log = {
 		chat = -1001118545630, --Your log chat, where your bot must be added!
@@ -247,6 +255,7 @@ local _M =
 	}
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 local multipurpose_plugins = os.getenv('MULTIPURPOSE_PLUGINS')
@@ -257,3 +266,5 @@ end
 
 return _M
 >>>>>>> parent of fd0df34... Enforce setting LOG_CHAT
+=======
+>>>>>>> parent of 56bf917... Move config to environment variables
