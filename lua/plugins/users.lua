@@ -125,8 +125,7 @@ function plugin.onTextMessage(msg, blocks)
 					administrator = _("%s is an admin"),
 					creator = _("%s is the group creator"),
 					unknown = _("%s has nothing to do with this chat"),
-					member = _("%s is a chat member"),
-					restricted = _("%s is a restricted")
+					member = _("%s is a chat member")
 				}
 				api.sendReply(msg, statuses[status]:format(name), 'html')
 			end
