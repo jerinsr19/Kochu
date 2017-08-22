@@ -1,4 +1,3 @@
-.env
 *.sh
 *.json
 *.tar
