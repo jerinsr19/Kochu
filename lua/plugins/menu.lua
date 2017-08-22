@@ -59,14 +59,11 @@ local function changeWarnSettings(chat_id, action)
 			return current..'->'..new_val
 		end
 	elseif action == 'status' then
-		local status = (db:hget('chat:'..chat_id..':warnsettings', 'type')) or config.chat_settings.warnsettings.type
+		local status = (db:hget('chat:'..chat_id..':warnsettings', 'type')) or 'kick'
 		if status == 'kick' then
 			db:hset('chat:'..chat_id..':warnsettings', 'type', 'ban')
 			return _("New action on max number of warns received: ban")
 		elseif status == 'ban' then
-			db:hset('chat:'..chat_id..':warnsettings', 'type', 'mute')
-			return _("New action on max number of warns received: mute")
-		elseif status == 'mute' then
 			db:hset('chat:'..chat_id..':warnsettings', 'type', 'kick')
 			return _("New action on max number of warns received: kick")
 		end
@@ -196,10 +193,8 @@ local function doKeyboard_menu(chat_id)
 	local action = (db:hget('chat:'..chat_id..':warnsettings', 'type')) or config.chat_settings['warnsettings']['type']
 	if action == 'kick' then
 		action = _("👞 kick")
-	elseif action == 'ban' then
+	else
 		action = _("🔨️ ban")
-	elseif action == 'mute' then
-		action = _("👁 mute")
 	end
 	local warn = {
 		{

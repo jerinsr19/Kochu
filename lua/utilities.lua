@@ -165,7 +165,6 @@ local function set_creator_permissions(chat_id, user_id)
 end
 
 function utilities.cache_adminlist(chat_id)
-	print('Saving the adminlist for:', chat_id)
 	local res, code = api.getChatAdministrators(chat_id)
 	if not res then
 		return false, code
