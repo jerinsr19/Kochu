@@ -76,11 +76,13 @@ local function changeWarnSettings(chat_id, action)
 end
 
 local function changeCharSettings(chat_id, field)
-	local humanizations = {
-		kick = _("Action -> kick"),
-		ban = _("Action -> ban"),
-		mute = _("Action -> mute"),
-		allow = _("Allowed ✅")
+	local chars = {
+		arab_kick = _("Senders of arab messages will be kicked"),
+		arab_ban = _("Senders of arab messages will be banned"),
+		arab_allow = _("Arab language allowed"),
+		rtl_kick = _("The use of the RTL character will lead to a kick"),
+		rtl_ban = _("The use of the RTL character will lead to a ban"),
+		rtl_allow = _("RTL character allowed"),
 	}
 
 	local hash = 'chat:'..chat_id..':char'
@@ -88,16 +90,16 @@ local function changeCharSettings(chat_id, field)
 	local text
 	if status == 'allowed' then
 		db:hset(hash, field, 'kick')
-		text = humanizations['kick']
+		text = chars[field:lower()..'_kick']
 	elseif status == 'kick' then
 		db:hset(hash, field, 'ban')
-		text = humanizations['ban']
+		text = chars[field:lower()..'_ban']
 	elseif status == 'ban' then
-		db:hset(hash, field, 'mute')
-		text = humanizations['mute']
-	elseif status == 'mute' then
 		db:hset(hash, field, 'allowed')
-		text = humanizations['allow']
+		text = chars[field:lower()..'_allow']
+	else
+		db:hset(hash, field, 'allowed')
+		text = chars[field:lower()..'_allow']
 	end
 
 	return text
@@ -145,8 +147,6 @@ local function charsettings_table(settings, chat_id)
 			return_table[field] = _('👞 kick')
 		elseif status == 'ban' then
 			return_table[field] = _('🔨 ban')
-		elseif status == 'mute' then
-			return_table[field] = _('👁 mute')
 		elseif status == 'allowed' then
 			return_table[field] = _('✅')
 		end
@@ -167,7 +167,7 @@ local function insert_settings_section(keyboard, settings_section, chat_id)
 		Rtl = _("RTL"),
 		Antibot = _("Ban bots"),
 		Reports = _("Reports"),
-		Weldelchain = _("Delete last welcome message"),
+		Weldelchain = _("Delete last welcome messages"),
 		Welbut = _("Welcome + rules button")
 	}
 

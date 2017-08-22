@@ -40,6 +40,7 @@ local function sendRequest(url)
 		print(clr.red..'Error while parsing JSON'..clr.reset, code)
 		print(clr.yellow..'Data:'..clr.reset, dat)
 		api.sendAdmin(dat..'\n'..code)
+		--error('Incorrect response')
 	end
 
 	if code ~= 200 then
@@ -52,11 +53,7 @@ local function sendRequest(url)
 		print(clr.red..code, tab.description..clr.reset)
 		db:hincrby('bot:errors', code, 1)
 		
-		local retry_after
-		if code == 429 then
-			retry_after = tab.parameters.retry_after
-			print(('%sRate limited for %d seconds%s'):format(clr.yellow, retry_after, clr.reset))
-		end
+		local retry_after = code == 429 and tab.parameters.retry_after or nil
 		
 		return false, code, tab.description, retry_after
 	end
@@ -274,14 +271,6 @@ function api.leaveChat(chat_id)
 
 	return res, code
 
-end
-
-function api.exportChatInviteLink(chat_id)
-	
-	local url = BASE_URL .. '/exportChatInviteLink?chat_id=' .. chat_id
-
-	return sendRequest(url)
-		
 end
 
 function api.sendMessage(chat_id, text, parse_mode, reply_markup, reply_to_message_id, link_preview)
