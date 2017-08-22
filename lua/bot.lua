@@ -2,8 +2,7 @@ local api = require 'methods'
 local redis = require 'redis'
 local clr = require 'term.colors'
 local u, config, plugins, last_update, last_cron
-config = require 'config' -- Load configuration file.
-db = redis.connect(config.redis.host, config.redis.port)
+db = redis.connect('127.0.0.1', 6379)
 
 function bot_init(on_reload) -- The function run when the bot is started or reloaded.
 	if on_reload then
@@ -12,7 +11,12 @@ function bot_init(on_reload) -- The function run when the bot is started or relo
 		package.loaded.utilities = nil
 	end
 
-	db:select(config.redis.db) --select the redis db
+	config = require 'config' -- Load configuration file.
+	assert(not (config.bot_api_key == "" or not config.bot_api_key), clr.red..'Insert the bot token in config.lua -> bot_api_key'..clr.reset)
+	assert(#config.superadmins > 0, clr.red..'Insert your Telegram ID in config.lua -> superadmins'..clr.reset)
+	assert(config.log.admin, clr.red..'Insert your Telegram ID in config.lua -> log.admin'..clr.reset)
+
+	db:select(config.db or 0) --select the redis db
 
 	u = require 'utilities' -- Load miscellaneous and cross-plugin functions.
 	locale = require 'languages'
@@ -120,9 +124,9 @@ local function on_msg_receive(msg, callback) -- The fn run whenever a message is
 		-- the ! indicates UTC - https://www.lua.org/manual/5.2/manual.html#pdf-os.date
 		if not msg.text then msg.text = msg.caption or '' end
 
-		locale.language = db:get('lang:'..msg.chat.id) or config.lang --group language
+		locale.language = db:get('lang:'..msg.chat.id) or 'en' --group language
 		if not config.available_languages[locale.language] then
-			locale.language = config.lang
+			locale.language = 'en'
 		end
 
 		collect_stats(msg)

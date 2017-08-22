@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 return {
 	bot_api_key = "319730917:AAFcJ3hiQQ1A9qmkgPRCrXD5wva8PMNRcPk", --Please add your bot api key here!
 	cmd = '^[/!#]',
@@ -71,7 +72,20 @@ local _M =
 	},
 	superadmins = assert(#json.decode(os.getenv('SUPERADMINS')) > 0,
 		'You must export $SUPERADMINS with a JSON array containing at least your Telegram ID'),
+=======
+return {
+	bot_api_key = "", --Please add your bot api key here!
+>>>>>>> parent of 56bf917... Move config to environment variables
 	cmd = '^[/!#]',
+	allowed_updates = {"message", "edited_message", "callback_query"},
+	db = 2, --default redis db: 0
+	superadmins = {23646077, 278941742},
+	log = {
+		chat = -1001118545630, --Your log chat, where your bot must be added!
+		admin = 23646077, --The admin.
+		stats = nil
+	},
+	human_readable_version = '4.2.0',
 	bot_settings = {
 		cache_time = {
 			adminlist = 18000, --5 hours (18000s) Admin Cache time, in seconds.
@@ -87,6 +101,9 @@ local _M =
 		stream_commands = true,
 		admin_mode = false
 	},
+	channel = '@groupbutler_beta', --channel username with the '@'
+	source_code = 'https://github.com/RememberTheAir/GroupButler/tree/beta',
+	help_groups_link = 'telegram.me/GBgroups',
 	plugins = {
 		'onmessage', --THIS MUST BE THE FIRST: IF AN USER IS FLOODING/IS BLOCKED, THE BOT WON'T GO THROUGH PLUGINS
 		'antispam', --SAME OF onmessage.lua
@@ -242,11 +259,3 @@ local _M =
 		d2 = {'bot:groupsid', 'bot:groupsid:removed', 'tempbanned', 'bot:blocked', 'remolden_chats'} --remolden_chats: chat removed with $remold command
 	}
 }
-
-local multipurpose_plugins = os.getenv('MULTIPURPOSE_PLUGINS')
-if multipurpose_plugins then
-	_M.multipurpose_plugins = assert(json.decode(multipurpose_plugins),
-		'$MULTIPURPOSE_PLUGINS must be a JSON array or empty.')
-end
-
-return _M
