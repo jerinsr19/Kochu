@@ -15,10 +15,8 @@ local function getFloodSettings_text(chat_id)
 	local action = (db:hget(hash, 'ActionFlood')) or 'kick'
 	if action == 'kick' then
 		action = _("👞 kick")
-	elseif action == 'ban' then
+	else
 		action = _("🔨️ ️ban")
-	elseif action == 'mute' then
-		action = _("👁 mute")
 	end
 	local num = (db:hget(hash, 'MaxFlood')) or 5
 	local exceptions = {
@@ -113,7 +111,8 @@ function plugin.onCallbackQuery(msg, blocks)
 		parse_mode = 'html'
 		local adminlist = u.getAdminlist(chat_id)
 		if adminlist then
-			text = adminlist
+			local is_empty, modlist = u.getModlist(chat_id)
+			text = adminlist..'\n'..modlist
 		else
 			text = _("I got kicked out of this group 😓")
 		end
