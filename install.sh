@@ -19,7 +19,7 @@ Default='\033[0m'
 <<<<<<< HEAD
 	echo -e "\e[1;36mInstalling rocks\e[0m"
 
-	rocks="luasocket luasec redis-lua lua-term serpent dkjson Lua-cURL"
+	rocks="luasocket luasec redis-lua lua-term serpent lua-cjson Lua-cURL"
 	for rock in $rocks; do
 		sudo luarocks install $rock
 	done
