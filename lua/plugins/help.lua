@@ -56,6 +56,8 @@ Remember: you have to use commands  *in the group*, unless they are specifically
 • `/dashboard`: see all the informations about the group
 • `/rules`: show the group rules
 • `/adminlist`: show the administrators of the group
+• `/modlist`: show the moderators of the group
+• `/staff`: show the list of the administrators and moderators
 • `/help`: receive the help message
 • `!kickme`: the bot will kick you
 *Note*: `/dashboard`, `/adminlist`, `/modlist` and `/staff`replies always in private. If the bot is unable to reach an user, he will ask in the group to that user to be started, but just if _silent mode_ is off.
@@ -90,7 +92,7 @@ Only the administrators who have the permission to restrict users can use these 
 
 • `/kick [by reply|username|id|text mention]`: kick a user from the group.
 • `/ban [by reply|username|id|text mention]`: ban a user from the group.
-• (*not working right now*) `/tempban [hours|nd nh]` = ban an user for a specific amount of hours (max: one week). For now, only by reply. Short form: `/tempban 1d 7h`
+• `/tempban [hours|nd nh]` = ban an user for a specific amount of hours (max: one week). For now, only by reply. Short form: `/tempban 1d 7h`
 • `/fwdban [by reply]`: ban the original sender of a forwarded message.
 • `/unban [by reply|username|id|text mention]`: unban the user from the group.
 • `/user [by reply|username|id|text mention]`: shows how many times the user has been banned *in all the groups*, and the warns received.

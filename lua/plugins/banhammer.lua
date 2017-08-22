@@ -216,6 +216,10 @@ function plugin.onTextMessage(msg, blocks)
 					api.sendReply(msg, text, 'html')
 				end
 			end
+		else
+			if blocks[1] == 'kickme' then
+				api.kickUser(msg.chat.id, msg.from.id)
+			end
 		end
 	end
 end
@@ -229,7 +233,8 @@ plugin.triggers = {
 		config.cmd..'(fwdban)$',
 		--config.cmd..'(tempban) (.+)',
 		config.cmd..'(unban) (.+)',
-		config.cmd..'(unban)$'
+		config.cmd..'(unban)$',
+		'^[#!](kickme)$'
 	}
 }
 

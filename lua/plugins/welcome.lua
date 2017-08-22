@@ -4,29 +4,31 @@ local api = require 'methods'
 
 local plugin = {}
 
-local function is_on(chat_id, setting)
+local function unblockUser(chat_id, user_id)
+	local hash = 'chat:'..chat_id..':blocked'
+	db:hdel(hash, user_id)
+end
+
+local function is_blocked(chat_id, user_id)
+	local hash = 'chat:'..chat_id..':blocked'
+	return db:hexists(hash, user_id)
+end
+
+local function is_locked(chat_id, thing)
 	local hash = 'chat:'..chat_id..':settings'
-	local current = db:hget(hash, setting) or config.chat_settings.settings[setting]
-	if current == 'on' then
+	local current = db:hget(hash, thing)
+	if current == 'off' then
 		return true
 	else
 		return false
 	end
 end
 
-local permissions = {'can_send_messages', 'can_send_media_messages', 'can_send_other_messages', 'can_add_web_page_previews'}
-
 local function apply_default_permissions(chat_id, users)
 	local hash = ('chat:%d:defpermissions'):format(chat_id)
 	local def_permissions = db:hgetall(hash)
 	
 	if next(def_permissions) then
-		for i=1, #permissions do
-			if not def_permissions[permissions[i]] then
-			def_permissions[permissions[i]] = config.chat_settings.defpermissions[permissions[i]]
-			end
-		end
-		
 		for i=1, #users do
 			api.restrictChatMember(chat_id, users[i].id, def_permissions)
 		end
@@ -34,7 +36,7 @@ local function apply_default_permissions(chat_id, users)
 end
 
 local function get_welcome(msg)
-	if not is_on(msg.chat.id, 'Welcome') then
+	if is_locked(msg.chat.id, 'Welcome') then
 		return false
 	end
 
@@ -51,15 +53,7 @@ local function get_welcome(msg)
 			reply_markup = {inline_keyboard={{{text = _('Read the rules'), url = u.deeplink_constructor(msg.chat.id, 'rules')}}}}
 		end
 
-		local res = api.sendDocumentId(msg.chat.id, file_id, nil, caption, reply_markup)
-		if res and is_on(msg.chat.id, 'Weldelchain') then
-			local key = ('chat:%d:lastwelcome'):format(msg.chat.id) -- get the id of the last sent welcome message
-			local message_id = db:get(key)
-			if message_id then
-				api.deleteMessage(msg.chat.id, message_id)
-			end
-			db:setex(key, 259200, res.result.message_id) --set the new message id to delete
-		end
+		api.sendDocumentId(msg.chat.id, file_id, nil, caption, reply_markup)
 		return false
 	elseif type == 'custom' then
 		local reply_markup, new_text = u.reply_markup_from_text(content)
@@ -141,15 +135,7 @@ function plugin.onTextMessage(msg, blocks)
 				table.insert(reply_markup.inline_keyboard, line)
 			end
 			local link_preview = text:find('telegra%.ph/') ~= nil
-			local res = api.sendMessage(msg.chat.id, text, true, reply_markup, nil, link_preview)
-			if res and is_on(msg.chat.id, 'Weldelchain') then
-				local key = ('chat:%d:lastwelcome'):format(msg.chat.id) -- get the id of the last sent welcome message
-				local message_id = db:get(key)
-				if message_id then
-					api.deleteMessage(msg.chat.id, message_id)
-				end
-				db:setex(key, 259200, res.result.message_id) --set the new message id to delete
-			end
+			api.sendMessage(msg.chat.id, text, true, reply_markup, nil, link_preview)
 		end
 
 		local send_rules_private = db:hget('user:'..msg.new_chat_member.id..':settings', 'rules_on_join')
